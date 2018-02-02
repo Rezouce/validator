@@ -3,6 +3,7 @@
 namespace Rezouce\Validator\Test;
 
 use PHPUnit\Framework\TestCase;
+use Rezouce\Validator\Validator;
 
 class FeatureTest extends TestCase
 {
