@@ -1,0 +1,16 @@
+{
+    "name": "rezouce/validator",
+    "description": "Provides validation mechanisms with a Laravel-like syntax.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Rezouce",
+            "email": "contact@rezouce.net"
+        }
+    ],
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    }
+}
