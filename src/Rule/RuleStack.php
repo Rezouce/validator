@@ -25,7 +25,10 @@ class RuleStack
             $errors = $this->validateRules($data, $registry);
         }
 
-        return new ValidationResult(empty($errors) ? [] : [$this->name => $errors]);
+        return new ValidationResult(
+            empty($errors) ? [$this->name => $data[$this->name] ?? null] : [],
+            empty($errors) ? [] : [$this->name => $errors]
+        );
     }
 
     private function hasMandatoryRules(ContainerInterface $registry): bool

@@ -4,17 +4,24 @@ namespace Rezouce\Validator;
 
 class ValidationResult
 {
-    /** @var array */
+    private $data;
+
     private $errors;
 
-    public function __construct(array $errors)
+    public function __construct(array $data, array $errors)
     {
+        $this->data = $data;
         $this->errors = $errors;
     }
 
     public function isValid(): bool
     {
         return empty($this->errors);
+    }
+
+    public function getData(): array
+    {
+        return $this->data;
     }
 
     public function getErrorMessages(): array

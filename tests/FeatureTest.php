@@ -21,11 +21,16 @@ class FeatureTest extends TestCase
         $validator = new Validator($rules, $this->createRegistry());
         $validation = $validator->validate([
             'username' => 'Rezouce',
-            'email' => 'contact@rezouce.net'
+            'email' => 'contact@rezouce.net',
         ]);
 
         $this->assertTrue($validation->isValid());
         $this->assertEmpty($validation->getErrorMessages());
+        $this->assertEquals([
+            'username' => 'Rezouce',
+            'email' => 'contact@rezouce.net',
+            'favorite_color' => null,
+        ], $validation->getData());
     }
 
     /** @test */
@@ -49,5 +54,6 @@ class FeatureTest extends TestCase
             'email' => ['This field should be a valid email.'],
             'favorite_color' => ['You must provide one of "red, green, blue, pink, yellow".'],
         ], $validation->getErrorMessages());
+        $this->assertEmpty($validation->getData());
     }
 }

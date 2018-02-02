@@ -19,11 +19,12 @@ class RuleStackTest extends TestCase
         ]);
 
         $validation = $ruleStack->validate([
-            'email' => 'contact@rezouce.net'
+            'email' => 'contact@rezouce.net',
         ], $this->createRegistry());
 
         $this->assertTrue($validation->isValid());
         $this->assertEmpty($validation->getErrorMessages());
+        $this->assertEquals(['email' => 'contact@rezouce.net'], $validation->getData());
     }
 
     /** @test */
@@ -34,13 +35,14 @@ class RuleStackTest extends TestCase
         ]);
 
         $validation = $ruleStack->validate([
-            'email' => 'test'
+            'email' => 'test',
         ], $this->createRegistry());
 
         $this->assertFalse($validation->isValid());
         $this->assertEquals([
             'email' => ['This field should be a valid email.'],
         ], $validation->getErrorMessages());
+        $this->assertEmpty($validation->getData());
     }
 
     /** @test */
@@ -52,5 +54,6 @@ class RuleStackTest extends TestCase
 
         $this->assertTrue($validation->isValid());
         $this->assertEmpty($validation->getErrorMessages());
+        $this->assertEquals(['email' => null], $validation->getData());
     }
 }

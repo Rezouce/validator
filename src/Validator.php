@@ -20,13 +20,17 @@ class Validator
 
     public function validate(array $data): ValidationResult
     {
+        $validatedData = [];
         $errors = [];
 
         foreach ($this->rules as $ruleStack) {
-            $errors = array_merge($errors, $ruleStack->validate($data, $this->registry)->getErrorMessages());
+            $validation = $ruleStack->validate($data, $this->registry);
+
+            $validatedData = array_merge($validatedData, $validation->getData());
+            $errors = array_merge($errors, $validation->getErrorMessages());
         }
 
-        return new ValidationResult($errors);
+        return new ValidationResult($validatedData, $errors);
     }
 
     private function createRules($rules)
