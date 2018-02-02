@@ -4,6 +4,7 @@ namespace Rezouce\Validator\Rule;
 
 use Psr\Container\ContainerInterface;
 use Rezouce\Validator\ValidationResult;
+use Rezouce\Validator\Validator\MandatoryValidatorInterface;
 
 class RuleStack
 {
@@ -20,6 +21,23 @@ class RuleStack
 
     public function validate(array $data, ContainerInterface $registry): ValidationResult
     {
+        if (isset($data[$this->name]) || $this->hasMandatoryRules($registry)) {
+            $errors = $this->validateRules($data, $registry);
+        }
+
+        return new ValidationResult(empty($errors) ? [] : [$this->name => $errors]);
+    }
+
+    private function hasMandatoryRules(ContainerInterface $registry): bool
+    {
+        return !empty(array_filter($this->rules, function(Rule $rule) use ($registry) {
+            
+            return $registry->get(($rule->getName())) instanceof MandatoryValidatorInterface;
+        }));
+    }
+
+    private function validateRules(array $data, ContainerInterface $registry): array
+    {
         $errors = [];
 
         foreach ($this->rules as $rule) {
@@ -34,6 +52,6 @@ class RuleStack
             }
         }
 
-        return new ValidationResult(empty($errors) ? [] : [$this->name => $errors]);
+        return $errors;
     }
 }

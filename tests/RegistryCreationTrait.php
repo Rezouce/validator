@@ -2,6 +2,7 @@
 
 namespace Rezouce\Validator\Test;
 
+use Rezouce\Validator\Validator\MandatoryValidatorInterface;
 use Rezouce\Validator\Validator\Registry\ValidatorRegistry;
 use Rezouce\Validator\Validator\ValidatorInterface;
 
@@ -13,7 +14,7 @@ trait RegistryCreationTrait
 
         $registry->add(
             'required',
-            new class() implements ValidatorInterface
+            new class() implements ValidatorInterface, MandatoryValidatorInterface
             {
                 public function validate($data): bool
                 {
@@ -33,8 +34,7 @@ trait RegistryCreationTrait
             {
                 public function validate($data): bool
                 {
-                    return $data === null
-                        || false !== filter_var($data, FILTER_VALIDATE_EMAIL);
+                    return false !== filter_var($data, FILTER_VALIDATE_EMAIL);
                 }
 
                 public function getErrorMessage(): string
@@ -57,8 +57,7 @@ trait RegistryCreationTrait
 
                 public function validate($data): bool
                 {
-                    return $data === null
-                        || in_array($data, $this->availableValues);
+                    return in_array($data, $this->availableValues);
                 }
 
                 public function getErrorMessage(): string

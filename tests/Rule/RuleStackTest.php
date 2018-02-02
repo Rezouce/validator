@@ -42,4 +42,15 @@ class RuleStackTest extends TestCase
             'email' => ['This field should be a valid email.'],
         ], $validation->getErrorMessages());
     }
+
+    /** @test */
+    public function itValidatesTheRulesOnlyWhenNecessary()
+    {
+        $ruleStack = new RuleStack('email', [new Rule('email')]);
+
+        $validation = $ruleStack->validate([], $this->createRegistry());
+
+        $this->assertTrue($validation->isValid());
+        $this->assertEmpty($validation->getErrorMessages());
+    }
 }
