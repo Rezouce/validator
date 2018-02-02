@@ -12,5 +12,15 @@
     "require": {},
     "require-dev": {
         "phpunit/phpunit": "^7.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rezouce\\Validator\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rezouce\\Validator\\Test\\": "tests"
+        }
     }
 }
