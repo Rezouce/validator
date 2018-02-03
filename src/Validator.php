@@ -3,6 +3,7 @@
 namespace Rezouce\Validator;
 
 use Psr\Container\ContainerInterface;
+use Rezouce\Validator\Rule\RuleNotValidException;
 use Rezouce\Validator\Rule\RuleStack;
 
 class Validator
@@ -15,6 +16,10 @@ class Validator
         $this->createRules($rules, $container);
     }
 
+    /**
+     * @throws RuleNotValidException
+     * @throws ValidatorExceptionInterface
+     */
     public function validate(array $data): ValidationResult
     {
         $validatedData = [];

@@ -2,9 +2,11 @@
 
 namespace Rezouce\Validator\Validator\RespectValidator;
 
+use Respect\Validation\Exceptions\ComponentException;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validatable;
-use Respect\Validation\Validator as Validator;
+use Respect\Validation\Validator;
+use Rezouce\Validator\Validator\ValidatorException;
 use Rezouce\Validator\Validator\ValidatorInterface;
 
 class RespectValidator implements ValidatorInterface
@@ -14,7 +16,7 @@ class RespectValidator implements ValidatorInterface
     /** @var Validatable */
     private $validator;
 
-    private $options;
+    private $options = [];
 
     private $errorMessage = '';
 
@@ -30,9 +32,16 @@ class RespectValidator implements ValidatorInterface
 
     private function getValidator()
     {
-        if (null === $this->validator) {
-            $this->validator = call_user_func_array([Validator::class, $this->rule], $this->options);
+        try {
+            if (null === $this->validator) {
+                $this->validator = call_user_func_array([Validator::class, $this->rule], $this->options);
+            }
+        } catch (ComponentException $e) {
+            throw new ValidatorException(
+                sprintf('No Respect\Validation validator has been found for rule %s.', $this->rule), $e->getCode(), $e
+            );
         }
+
 
         return $this->validator;
     }

@@ -4,6 +4,7 @@ namespace Rezouce\Validator\Test\Validator\RespectValidator;
 
 use PHPUnit\Framework\TestCase;
 use Rezouce\Validator\Validator\RespectValidator\RespectValidator;
+use Rezouce\Validator\Validator\ValidatorException;
 
 class RespectValidatorTest extends TestCase
 {
@@ -87,5 +88,24 @@ class RespectValidatorTest extends TestCase
             ['notBlank', true],
             ['notEmpty', true],
         ];
+    }
+
+    /** @test */
+    public function testTheOptionsCanBeOmittedToValidateBasicRules()
+    {
+        $validator = new RespectValidator('nullType');
+
+        $this->assertTrue($validator->validate(null));
+    }
+
+    /** @test */
+    public function itThrowsAnExceptionWhenTheRuleCannotBeResolved()
+    {
+        $validator = new RespectValidator('inexisting');
+
+        $this->expectException(ValidatorException::class);
+        $this->expectExceptionMessage('No Respect\Validation validator has been found for rule inexisting.');
+
+        $validator->validate('data');
     }
 }

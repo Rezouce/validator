@@ -2,9 +2,11 @@
 
 namespace Rezouce\Validator\Rule;
 
+use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Rezouce\Validator\ValidationResult;
 use Rezouce\Validator\Validator\ValidatorInterface;
+use Rezouce\Validator\ValidatorExceptionInterface;
 
 class RuleStack
 {
@@ -23,6 +25,10 @@ class RuleStack
         $this->container = $container;
     }
 
+    /**
+     * @throws RuleNotValidException
+     * @throws ValidatorExceptionInterface
+     */
     public function validate(array $data): ValidationResult
     {
         if (isset($data[$this->name]) || $this->hasMandatoryRules()) {
@@ -38,8 +44,16 @@ class RuleStack
     private function hasMandatoryRules(): bool
     {
         return !empty(array_filter($this->rules, function(Rule $rule) {
-            /** @var ValidatorInterface $validator */
-            $validator = $this->container->get(($rule->getName()));
+            try {
+                /** @var ValidatorInterface $validator */
+                $validator = $this->container->get(($rule->getName()));
+            } catch (ContainerExceptionInterface $e) {
+                throw new RuleNotValidException(sprintf(
+                    'No validator has been found for rule %s when validating field %s.',
+                    $rule->getName(),
+                    $this->name
+                ), $e->getCode(), $e);
+            }
 
             return $validator->isMandatory();
         }));

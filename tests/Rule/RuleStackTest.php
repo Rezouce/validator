@@ -4,6 +4,7 @@ namespace Rezouce\Validator\Test\Rule;
 
 use PHPUnit\Framework\TestCase;
 use Rezouce\Validator\Rule\Rule;
+use Rezouce\Validator\Rule\RuleNotValidException;
 use Rezouce\Validator\Rule\RuleStack;
 use Rezouce\Validator\Validator\RespectValidator\RespectValidationContainer;
 
@@ -49,5 +50,16 @@ class RuleStackTest extends TestCase
         $this->assertTrue($validation->isValid());
         $this->assertEmpty($validation->getErrorMessages());
         $this->assertEquals(['email' => null], $validation->getData());
+    }
+
+    /** @test */
+    public function itThrowsAnExceptionIsTheRuleCannotBeFound()
+    {
+        $ruleStack = new RuleStack('email', [new Rule('inexisting')], new RespectValidationContainer);
+
+        $this->expectException(RuleNotValidException::class);
+        $this->expectExceptionMessage('No validator has been found for rule inexisting when validating field email.');
+
+        $ruleStack->validate([]);
     }
 }
