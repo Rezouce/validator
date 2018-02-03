@@ -5,22 +5,18 @@ namespace Rezouce\Validator\Test\Rule;
 use PHPUnit\Framework\TestCase;
 use Rezouce\Validator\Rule\Rule;
 use Rezouce\Validator\Rule\RuleStack;
-use Rezouce\Validator\Test\RegistryCreationTrait;
+use Rezouce\Validator\Validator\RespectValidator\RespectValidationContainer;
 
 class RuleStackTest extends TestCase
 {
-    use RegistryCreationTrait;
-
     /** @test */
     public function itCanPerformValidationOfValidData()
     {
         $ruleStack = new RuleStack('email', [
-            new Rule('required'), new Rule('email')
-        ]);
+            new Rule('notOptional'), new Rule('email')
+        ], new RespectValidationContainer);
 
-        $validation = $ruleStack->validate([
-            'email' => 'contact@rezouce.net',
-        ], $this->createRegistry());
+        $validation = $ruleStack->validate(['email' => 'contact@rezouce.net']);
 
         $this->assertTrue($validation->isValid());
         $this->assertEmpty($validation->getErrorMessages());
@@ -31,16 +27,14 @@ class RuleStackTest extends TestCase
     public function itCanPerformValidationOfInvalidData()
     {
         $ruleStack = new RuleStack('email', [
-            new Rule('required'), new Rule('email')
-        ]);
+            new Rule('notOptional'), new Rule('email')
+        ], new RespectValidationContainer);
 
-        $validation = $ruleStack->validate([
-            'email' => 'test',
-        ], $this->createRegistry());
+        $validation = $ruleStack->validate(['email' => 'test']);
 
         $this->assertFalse($validation->isValid());
         $this->assertEquals([
-            'email' => ['This field should be a valid email.'],
+            'email' => ['"test" must be valid email'],
         ], $validation->getErrorMessages());
         $this->assertEmpty($validation->getData());
     }
@@ -48,9 +42,9 @@ class RuleStackTest extends TestCase
     /** @test */
     public function itValidatesTheRulesOnlyWhenNecessary()
     {
-        $ruleStack = new RuleStack('email', [new Rule('email')]);
+        $ruleStack = new RuleStack('email', [new Rule('email')], new RespectValidationContainer);
 
-        $validation = $ruleStack->validate([], $this->createRegistry());
+        $validation = $ruleStack->validate([]);
 
         $this->assertTrue($validation->isValid());
         $this->assertEmpty($validation->getErrorMessages());

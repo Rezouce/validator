@@ -4,7 +4,7 @@ namespace Rezouce\Validator\Rule;
 
 use Psr\Container\ContainerInterface;
 use Rezouce\Validator\ValidationResult;
-use Rezouce\Validator\Validator\MandatoryValidatorInterface;
+use Rezouce\Validator\Validator\ValidatorInterface;
 
 class RuleStack
 {
@@ -12,17 +12,21 @@ class RuleStack
 
     private $rules;
 
-    public function __construct(string $name, $rules)
+    private $container;
+
+    public function __construct(string $name, $rules, ContainerInterface $container)
     {
         $this->name = $name;
 
         $this->rules = (new RulesParser)->parse($rules);
+
+        $this->container = $container;
     }
 
-    public function validate(array $data, ContainerInterface $registry): ValidationResult
+    public function validate(array $data): ValidationResult
     {
-        if (isset($data[$this->name]) || $this->hasMandatoryRules($registry)) {
-            $errors = $this->validateRules($data, $registry);
+        if (isset($data[$this->name]) || $this->hasMandatoryRules()) {
+            $errors = $this->validateRules($data);
         }
 
         return new ValidationResult(
@@ -31,20 +35,22 @@ class RuleStack
         );
     }
 
-    private function hasMandatoryRules(ContainerInterface $registry): bool
+    private function hasMandatoryRules(): bool
     {
-        return !empty(array_filter($this->rules, function(Rule $rule) use ($registry) {
-            
-            return $registry->get(($rule->getName())) instanceof MandatoryValidatorInterface;
+        return !empty(array_filter($this->rules, function(Rule $rule) {
+            /** @var ValidatorInterface $validator */
+            $validator = $this->container->get(($rule->getName()));
+
+            return $validator->isMandatory();
         }));
     }
 
-    private function validateRules(array $data, ContainerInterface $registry): array
+    private function validateRules(array $data): array
     {
         $errors = [];
 
         foreach ($this->rules as $rule) {
-            $validator = $registry->get($rule->getName());
+            $validator = $this->container->get($rule->getName());
 
             if (method_exists($validator, 'setOptions')) {
                 $validator->setOptions($rule->getOptions());

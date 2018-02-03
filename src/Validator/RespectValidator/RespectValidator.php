@@ -52,4 +52,9 @@ class RespectValidator implements ValidatorInterface
     {
         return $this->errorMessage;
     }
+
+    public function isMandatory(): bool
+    {
+        return in_array(strtolower($this->rule), ['notoptional', 'notblank', 'notempty', 'nulltype']);
+    }
 }

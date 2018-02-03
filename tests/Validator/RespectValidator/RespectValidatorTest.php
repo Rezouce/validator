@@ -63,4 +63,29 @@ class RespectValidatorTest extends TestCase
             ['fibonacci', [], 6, '6 must be a valid Fibonacci number'],
         ];
     }
+
+    /**
+     * @test
+     * @dataProvider getMandatoryRulesProvider
+     */
+    public function itHasMandatoryRules(
+        string $rule,
+        $expectedResult
+    ) {
+        $validator = new RespectValidator($rule);
+
+        $this->assertEquals($expectedResult, $validator->isMandatory());
+    }
+
+    public function getMandatoryRulesProvider()
+    {
+        return [
+            ['between', false],
+            ['in', false],
+            ['notOptional', true],
+            ['nullType', true],
+            ['notBlank', true],
+            ['notEmpty', true],
+        ];
+    }
 }

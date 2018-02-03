@@ -10,12 +10,9 @@ class Validator
     /** @var RuleStack[] */
     private $rules = [];
 
-    private $registry;
-
-    public function __construct(array $rules, ContainerInterface $registry)
+    public function __construct(array $rules, ContainerInterface $container)
     {
-        $this->createRules($rules);
-        $this->registry = $registry;
+        $this->createRules($rules, $container);
     }
 
     public function validate(array $data): ValidationResult
@@ -24,7 +21,7 @@ class Validator
         $errors = [];
 
         foreach ($this->rules as $ruleStack) {
-            $validation = $ruleStack->validate($data, $this->registry);
+            $validation = $ruleStack->validate($data);
 
             $validatedData = array_merge($validatedData, $validation->getData());
             $errors = array_merge($errors, $validation->getErrorMessages());
@@ -33,10 +30,10 @@ class Validator
         return new ValidationResult($validatedData, $errors);
     }
 
-    private function createRules($rules)
+    private function createRules(array $rules, ContainerInterface $container)
     {
         foreach ($rules as $dataName => $dataRules) {
-            $this->rules[] = new RuleStack($dataName, $dataRules);
+            $this->rules[] = new RuleStack($dataName, $dataRules, $container);
         }
     }
 }
