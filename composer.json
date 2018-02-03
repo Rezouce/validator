@@ -13,7 +13,8 @@
         "psr/container": "^1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0"
+        "phpunit/phpunit": "^7.0",
+        "respect/validation": "^1.1"
     },
     "autoload": {
         "psr-4": {
@@ -24,5 +25,8 @@
         "psr-4": {
             "Rezouce\\Validator\\Test\\": "tests"
         }
+    },
+    "suggest": {
+        "respect/validation": "Provides a good number of validators that can be used through the RespectValidator class"
     }
 }
