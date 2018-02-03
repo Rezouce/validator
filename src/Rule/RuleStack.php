@@ -43,7 +43,7 @@ class RuleStack
 
     private function hasMandatoryRules(): bool
     {
-        return !empty(array_filter($this->rules, function(Rule $rule) {
+        return !empty(array_filter($this->rules, function (Rule $rule) {
             try {
                 /** @var ValidatorInterface $validator */
                 $validator = $this->container->get(($rule->getName()));

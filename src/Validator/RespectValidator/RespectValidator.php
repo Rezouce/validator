@@ -50,7 +50,7 @@ class RespectValidator implements ValidatorInterface
     {
         try {
             return $this->getValidator()->assert($data);
-        } catch(NestedValidationException $e) {
+        } catch (NestedValidationException $e) {
             $this->errorMessage = implode(',', $e->getMessages());
         }
 
