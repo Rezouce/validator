@@ -24,7 +24,7 @@ class RulesParserTest extends TestCase
 
         $rule2 = next($parsedRules);
         $this->assertEquals('in', $rule2->getName());
-        $this->assertEquals(['jedi', 'sith'], $rule2->getOptions());
+        $this->assertEquals([['jedi', 'sith']], $rule2->getOptions());
     }
 
     /** @test */
@@ -43,7 +43,7 @@ class RulesParserTest extends TestCase
 
         $rule2 = next($parsedRules);
         $this->assertEquals('in', $rule2->getName());
-        $this->assertEquals(['jedi', 'sith'], $rule2->getOptions());
+        $this->assertEquals([['jedi', 'sith']], $rule2->getOptions());
     }
 
     /** @test */

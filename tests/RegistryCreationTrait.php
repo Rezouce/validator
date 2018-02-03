@@ -52,7 +52,7 @@ trait RegistryCreationTrait
 
                 public function setOptions(array $availableValues)
                 {
-                    $this->availableValues = $availableValues;
+                    $this->availableValues = current($availableValues) ?: [];
                 }
 
                 public function validate($data): bool

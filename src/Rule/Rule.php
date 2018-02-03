@@ -14,12 +14,12 @@ class Rule
         $this->options = $options;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function getOptions()
+    public function getOptions(): array
     {
         return $this->options;
     }

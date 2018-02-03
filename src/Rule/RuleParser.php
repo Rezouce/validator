@@ -11,16 +11,18 @@ class RuleParser
         }
 
         if (is_string($rule)) {
-            $rule =  explode(':', $rule);
+            $rule = explode(':', $rule);
         }
 
-        [$name, $options] = array_merge($rule, ['']);
+        $name = array_shift($rule);
 
-        if (is_string($options)) {
-            $options = empty($options)
-                ? []
-                : explode(',', $options);
-        }
+        $options = array_map(function ($option) {
+            if (is_string($option) && !empty($option)) {
+                return explode(',', $option);
+            }
+
+            return $option;
+        }, $rule ?: []);
 
         return new Rule($name, $options);
     }

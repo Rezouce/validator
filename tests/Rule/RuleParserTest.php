@@ -17,7 +17,7 @@ class RuleParserTest extends TestCase
 
         $this->assertInstanceOf(Rule::class, $rule);
         $this->assertEquals('in', $rule->getName());
-        $this->assertEquals(['jedi', 'sith'], $rule->getOptions());
+        $this->assertEquals([['jedi', 'sith']], $rule->getOptions());
     }
 
     /** @test */
@@ -41,7 +41,7 @@ class RuleParserTest extends TestCase
 
         $this->assertInstanceOf(Rule::class, $rule);
         $this->assertEquals('in', $rule->getName());
-        $this->assertEquals(['jedi', 'sith'], $rule->getOptions());
+        $this->assertEquals([['jedi', 'sith']], $rule->getOptions());
     }
 
     /** @test */
@@ -61,10 +61,10 @@ class RuleParserTest extends TestCase
     {
         $parser = new RuleParser();
 
-        $rule = $parser->parse(new Rule('in', ['jedi', 'sith']));
+        $rule = $parser->parse(new Rule('in', [['jedi', 'sith']]));
 
         $this->assertInstanceOf(Rule::class, $rule);
         $this->assertEquals('in', $rule->getName());
-        $this->assertEquals(['jedi', 'sith'], $rule->getOptions());
+        $this->assertEquals([['jedi', 'sith']], $rule->getOptions());
     }
 }
