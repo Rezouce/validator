@@ -21,7 +21,7 @@ class RespectValidatorTest extends TestCase
         $validator = new RespectValidator($rule);
         $validator->setOptions($options);
 
-        $this->assertEquals($expectedResult, $validator->validate($testedData));
+        $this->assertEquals($expectedResult, $validator->validate($testedData)->isValid());
     }
 
     public function getDataProvider()
@@ -48,20 +48,19 @@ class RespectValidatorTest extends TestCase
     ) {
         $validator = new RespectValidator($rule);
         $validator->setOptions($options);
-        $validator->validate($testedData);
 
-        $this->assertEquals($expectedResult, $validator->getErrorMessage());
+        $this->assertEquals($expectedResult, $validator->validate($testedData)->getErrorMessages());
     }
 
     public function getErrorMessageProvider()
     {
         return [
-            ['between', [10, 20, true], 15, ''],
-            ['between', [10, 20, true], 5, '5 must be greater than or equal to 10'],
-            ['in', ['red', 'green', 'blue'], 'red', ''],
-            ['in', ['red', 'green', 'blue'], 'yellow', '"yellow" must be in "red"'],
-            ['fibonacci', [], 34, ''],
-            ['fibonacci', [], 6, '6 must be a valid Fibonacci number'],
+            ['between', [10, 20, true], 15, []],
+            ['between', [10, 20, true], 5, ['5 must be greater than or equal to 10']],
+            ['in', ['red', 'green', 'blue'], 'red', []],
+            ['in', ['red', 'green', 'blue'], 'yellow', ['"yellow" must be in "red"']],
+            ['fibonacci', [], 34, []],
+            ['fibonacci', [], 6, ['6 must be a valid Fibonacci number']],
         ];
     }
 
@@ -95,7 +94,7 @@ class RespectValidatorTest extends TestCase
     {
         $validator = new RespectValidator('nullType');
 
-        $this->assertTrue($validator->validate(null));
+        $this->assertTrue($validator->validate(null)->isValid());
     }
 
     /** @test */

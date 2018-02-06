@@ -2,14 +2,14 @@
 
 namespace Rezouce\Validator\Validator;
 
+use Rezouce\Validator\ValidationResult;
+
 interface ValidatorInterface
 {
     /**
      * @throws ValidatorException should be thrown when the validation cannot be performed.
      */
-    public function validate($data): bool;
-
-    public function getErrorMessage(): string;
+    public function validate($data): ValidationResult;
 
     public function isMandatory(): bool;
 }

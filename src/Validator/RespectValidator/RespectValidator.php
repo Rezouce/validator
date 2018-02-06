@@ -6,6 +6,7 @@ use Respect\Validation\Exceptions\ComponentException;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validatable;
 use Respect\Validation\Validator;
+use Rezouce\Validator\ValidationResult;
 use Rezouce\Validator\Validator\ValidatorException;
 use Rezouce\Validator\Validator\ValidatorInterface;
 
@@ -17,8 +18,6 @@ class RespectValidator implements ValidatorInterface
     private $validator;
 
     private $options = [];
-
-    private $errorMessage = '';
 
     public function __construct(string $rule)
     {
@@ -46,20 +45,15 @@ class RespectValidator implements ValidatorInterface
         return $this->validator;
     }
 
-    public function validate($data): bool
+    public function validate($data): ValidationResult
     {
         try {
-            return $this->getValidator()->assert($data);
+            $this->getValidator()->assert($data);
         } catch (NestedValidationException $e) {
-            $this->errorMessage = implode(',', $e->getMessages());
+            $errorMessages = $e->getMessages();
         }
 
-        return false;
-    }
-
-    public function getErrorMessage(): string
-    {
-        return $this->errorMessage;
+        return new ValidationResult([$this->rule => $data], $errorMessages ?? []);
     }
 
     public function isMandatory(): bool

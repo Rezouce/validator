@@ -64,14 +64,17 @@ class RuleStack
         $errors = [];
 
         foreach ($this->rules as $rule) {
+            /** @var ValidatorInterface $validator */
             $validator = $this->container->get($rule->getName());
 
             if (method_exists($validator, 'setOptions')) {
                 $validator->setOptions($rule->getOptions());
             }
 
-            if (!$validator->validate($data[$this->name] ?? null)) {
-                $errors[] = $validator->getErrorMessage();
+            $validation = $validator->validate($data[$this->name] ?? null);
+
+            if (!$validation->isValid()) {
+                $errors = array_merge($errors, $validation->getErrorMessages());
             }
         }
 
