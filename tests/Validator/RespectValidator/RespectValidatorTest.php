@@ -12,7 +12,7 @@ class RespectValidatorTest extends TestCase
      * @test
      * @dataProvider getDataProvider
      */
-    public function itValidatesAgainstTheRespectValidationMatchingTheProvidedRule(
+    public function it_validates_against_the_respect_validation_matching_the_provided_rule(
         string $rule,
         array $options,
         $testedData,
@@ -40,7 +40,7 @@ class RespectValidatorTest extends TestCase
      * @test
      * @dataProvider getErrorMessageProvider
      */
-    public function itReturnsAnErrorMessageCreateFromTheRespectValidationMatchingTheProvidedRule(
+    public function it_returns_an_error_message_created_from_the_respect_validation_matching_the_provided_rule(
         string $rule,
         array $options,
         $testedData,
@@ -69,7 +69,7 @@ class RespectValidatorTest extends TestCase
      * @test
      * @dataProvider getMandatoryRulesProvider
      */
-    public function itHasMandatoryRules(
+    public function it_has_mandatory_rules(
         string $rule,
         $expectedResult
     ) {
@@ -91,7 +91,7 @@ class RespectValidatorTest extends TestCase
     }
 
     /** @test */
-    public function testTheOptionsCanBeOmittedToValidateBasicRules()
+    public function it_can_ommit_the_options_to_validate_rules_that_doesnt_require_it()
     {
         $validator = new RespectValidator('nullType');
 
@@ -99,7 +99,7 @@ class RespectValidatorTest extends TestCase
     }
 
     /** @test */
-    public function itThrowsAnExceptionWhenTheRuleCannotBeResolved()
+    public function it_throws_an_exception_when_the_rule_cannot_be_resolved()
     {
         $validator = new RespectValidator('inexisting');
 

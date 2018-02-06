@@ -9,7 +9,7 @@ use Rezouce\Validator\Validator;
 class ValidatorTest extends TestCase
 {
     /** @test */
-    public function itCanPerformValidationOfValidData()
+    public function it_can_perform_validation_of_valid_data()
     {
         $rules = [
             'username' => 'alpha',
@@ -36,7 +36,7 @@ class ValidatorTest extends TestCase
     }
 
     /** @test */
-    public function itCanPerformValidationOfInvalidData()
+    public function it_can_perform_validation_of_invalid_data()
     {
         $rules = [
             'username' => 'alpha',

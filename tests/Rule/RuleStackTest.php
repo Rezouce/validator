@@ -11,7 +11,7 @@ use Rezouce\Validator\Validator\RespectValidator\RespectValidationContainer;
 class RuleStackTest extends TestCase
 {
     /** @test */
-    public function itCanPerformValidationOfValidData()
+    public function it_can_perform_the_validation_of_valid_data()
     {
         $ruleStack = new RuleStack('email', [
             new Rule('notOptional'), new Rule('email')
@@ -25,7 +25,7 @@ class RuleStackTest extends TestCase
     }
 
     /** @test */
-    public function itCanPerformValidationOfInvalidData()
+    public function it_can_perform_the_validation_of_invalid_data()
     {
         $ruleStack = new RuleStack('email', [
             new Rule('notOptional'), new Rule('email')
@@ -41,7 +41,7 @@ class RuleStackTest extends TestCase
     }
 
     /** @test */
-    public function itValidatesTheRulesOnlyWhenNecessary()
+    public function it_validates_the_rules_only_when_necessary()
     {
         $ruleStack = new RuleStack('email', [new Rule('email')], new RespectValidationContainer);
 
@@ -53,7 +53,7 @@ class RuleStackTest extends TestCase
     }
 
     /** @test */
-    public function itThrowsAnExceptionIsTheRuleCannotBeFound()
+    public function it_throws_an_exception_if_a_rule_cannot_be_found()
     {
         $ruleStack = new RuleStack('email', [new Rule('inexisting')], new RespectValidationContainer);
 

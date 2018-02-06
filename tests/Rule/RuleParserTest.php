@@ -9,7 +9,7 @@ use Rezouce\Validator\Rule\RuleParser;
 class RuleParserTest extends TestCase
 {
     /** @test */
-    public function itParsesAStringRuleToARuleObject()
+    public function it_parses_a_string_rule_to_a_rule_object()
     {
         $parser = new RuleParser();
 
@@ -21,7 +21,7 @@ class RuleParserTest extends TestCase
     }
 
     /** @test */
-    public function itParsesAStringRuleToARuleObjectEvenIfThereIsNoOptions()
+    public function it_parses_a_string_rule_to_a_rule_object_even_if_there_is_no_options()
     {
         $parser = new RuleParser();
 
@@ -33,7 +33,7 @@ class RuleParserTest extends TestCase
     }
 
     /** @test */
-    public function itParsesTheOptionsAsStringWhenThereAreOnlyOneChoice()
+    public function it_parses_the_options_as_string_when_there_are_only_one_choice()
     {
         $parser = new RuleParser();
 
@@ -43,7 +43,7 @@ class RuleParserTest extends TestCase
     }
 
     /** @test */
-    public function itParsesArrayRuleToARuleObject()
+    public function it_parses_an_array_rule_to_a_rule_object()
     {
         $parser = new RuleParser();
 
@@ -55,7 +55,7 @@ class RuleParserTest extends TestCase
     }
 
     /** @test */
-    public function itParsesArrayRuleToARuleObjectEvenIfThereIsNoOptions()
+    public function it_parses_an_array_rule_to_a_rule_object_even_if_there_is_no_options()
     {
         $parser = new RuleParser();
 
@@ -67,7 +67,7 @@ class RuleParserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheAlreadyDefinedRule()
+    public function it_returns_the_same_rule_object_as_provided()
     {
         $parser = new RuleParser();
 
@@ -79,7 +79,7 @@ class RuleParserTest extends TestCase
     }
 
     /** @test */
-    public function itRecastNumericValuesInStringRules()
+    public function it_recasts_numeric_values_in_string_for_options()
     {
         $parser = new RuleParser();
 

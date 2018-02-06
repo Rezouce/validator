@@ -9,7 +9,7 @@ use Rezouce\Validator\Rule\RulesParser;
 class RulesParserTest extends TestCase
 {
     /** @test */
-    public function itParsesStringRulesToRuleObjects()
+    public function it_parses_string_rules_to_rule_objects()
     {
         $parser = new RulesParser();
 
@@ -28,7 +28,7 @@ class RulesParserTest extends TestCase
     }
 
     /** @test */
-    public function itParsesArrayOfStringRulesToRuleObjects()
+    public function it_parses_array_of_string_rules_to_rule_objects()
     {
         $parser = new RulesParser();
 
@@ -47,7 +47,7 @@ class RulesParserTest extends TestCase
     }
 
     /** @test */
-    public function itReturnsTheAlreadyDefinedRules()
+    public function it_returns_the_same_rule_object_as_provided()
     {
         $parser = new RulesParser();
 
