@@ -11,7 +11,7 @@ use Rezouce\Validator\Validator\RespectValidator\RespectValidationContainer;
 class RuleStackTest extends TestCase
 {
     /** @test */
-    public function it_can_perform_the_validation_of_valid_data()
+    public function it_can_perform_the_validation_of_simple_valid_data()
     {
         $ruleStack = new RuleStack('email', [
             new Rule('notOptional'), new Rule('email')
@@ -25,7 +25,7 @@ class RuleStackTest extends TestCase
     }
 
     /** @test */
-    public function it_can_perform_the_validation_of_invalid_data()
+    public function it_can_perform_the_validation_of_simple_invalid_data()
     {
         $ruleStack = new RuleStack('email', [
             new Rule('notOptional'), new Rule('email')
@@ -36,6 +36,38 @@ class RuleStackTest extends TestCase
         $this->assertFalse($validation->isValid());
         $this->assertEquals([
             'email' => ['"test" must be valid email'],
+        ], $validation->getErrorMessages());
+        $this->assertEmpty($validation->getData());
+    }
+
+    /** @test */
+    public function it_can_perform_the_validation_of_complex_valid_data()
+    {
+        $ruleStack = new RuleStack('users.*.name', [new Rule('alpha')], new RespectValidationContainer);
+
+        $validation = $ruleStack->validate([
+            'users' => [['name' => 'Rezouce']],
+        ]);
+
+        $this->assertTrue($validation->isValid());
+        $this->assertEmpty($validation->getErrorMessages());
+        $this->assertEquals([
+            'users' => [['name' => 'Rezouce']],
+        ], $validation->getData());
+    }
+
+    /** @test */
+    public function it_can_perform_the_validation_of_complex_invalid_data()
+    {
+        $ruleStack = new RuleStack('users.*.email', [new Rule('email')], new RespectValidationContainer);
+
+        $validation = $ruleStack->validate([
+            'users' => [['email' => 'invalid email']],
+        ]);
+
+        $this->assertFalse($validation->isValid());
+        $this->assertEquals([
+            'users.0.email' => ['"invalid email" must be valid email'],
         ], $validation->getErrorMessages());
         $this->assertEmpty($validation->getData());
     }

@@ -31,14 +31,29 @@ class RuleStack
      */
     public function validate(array $data): ValidationResult
     {
-        if (isset($data[$this->name]) || $this->hasMandatoryRules()) {
-            $errors = $this->validateRules($data);
+        $dataParser = new DataParser();
+        $dataCollection = $dataParser->parse($data, $this->name);
+
+        $hasMandatoryRules = $this->hasMandatoryRules();
+
+        $errors = [];
+        $validatedData = [];
+
+        foreach ($dataCollection as $data) {
+            if ($data->isNull() && !$hasMandatoryRules) {
+                $validatedData = $this->extractValidatedData($validatedData, $data);
+            } else {
+                $newErrors = $this->validateRules($data);
+
+                if (empty($newErrors)) {
+                    $validatedData = $this->extractValidatedData($validatedData, $data);
+                }
+
+                $errors = array_merge($errors, $newErrors);
+            }
         }
 
-        return new ValidationResult(
-            empty($errors) ? [$this->name => $data[$this->name] ?? null] : [],
-            empty($errors) ? [] : [$this->name => $errors]
-        );
+        return new ValidationResult($validatedData, $errors);
     }
 
     private function hasMandatoryRules(): bool
@@ -59,7 +74,7 @@ class RuleStack
         }));
     }
 
-    private function validateRules(array $data): array
+    private function validateRules(Data $data): array
     {
         $errors = [];
 
@@ -71,13 +86,26 @@ class RuleStack
                 $validator->setOptions($rule->getOptions());
             }
 
-            $validation = $validator->validate($data[$this->name] ?? null);
+            $validation = $validator->validate($data->getData());
 
             if (!$validation->isValid()) {
-                $errors = array_merge($errors, $validation->getErrorMessages());
+                $errors = array_merge($errors, [$data->getKey() => $validation->getErrorMessages()]);
             }
         }
 
         return $errors;
+    }
+
+    private function extractValidatedData(array $validatedData, Data $data): array
+    {
+        $currentLevel = &$validatedData;
+
+        foreach (explode('.', $data->getKey()) as $level) {
+            $currentLevel = &$currentLevel[$level];
+        }
+
+        $currentLevel = $data->getData();
+
+        return $validatedData;
     }
 }

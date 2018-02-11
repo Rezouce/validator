@@ -28,7 +28,7 @@ class Validator
         foreach ($this->rules as $ruleStack) {
             $validation = $ruleStack->validate($data);
 
-            $validatedData = array_merge($validatedData, $validation->getData());
+            $validatedData = array_replace_recursive($validatedData, $validation->getData());
             $errors = array_merge($errors, $validation->getErrorMessages());
         }
 
