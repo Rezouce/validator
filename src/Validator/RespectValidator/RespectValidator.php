@@ -53,7 +53,7 @@ class RespectValidator implements ValidatorInterface
             $errorMessages = $e->getMessages();
         }
 
-        return new ValidationResult([$this->rule => $data], $errorMessages ?? []);
+        return new ValidationResult($data, $errorMessages ?? []);
     }
 
     public function isMandatory(): bool

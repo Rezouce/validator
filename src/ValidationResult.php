@@ -8,7 +8,7 @@ class ValidationResult
 
     private $errors;
 
-    public function __construct(array $data, array $errors)
+    public function __construct($data, array $errors)
     {
         $this->data = $data;
         $this->errors = $errors;
@@ -19,7 +19,7 @@ class ValidationResult
         return empty($this->errors);
     }
 
-    public function getData(): array
+    public function getData()
     {
         return $this->data;
     }

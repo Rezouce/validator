@@ -22,6 +22,7 @@ class RespectValidatorTest extends TestCase
         $validator->setOptions($options);
 
         $this->assertEquals($expectedResult, $validator->validate($testedData)->isValid());
+        $this->assertEquals($testedData, $validator->validate($testedData)->getData());
     }
 
     public function getDataProvider()
