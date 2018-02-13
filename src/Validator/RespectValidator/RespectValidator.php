@@ -7,10 +7,11 @@ use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Validatable;
 use Respect\Validation\Validator;
 use Rezouce\Validator\ValidationResult;
+use Rezouce\Validator\Validator\OptionsAware;
 use Rezouce\Validator\Validator\ValidatorException;
 use Rezouce\Validator\Validator\ValidatorInterface;
 
-class RespectValidator implements ValidatorInterface
+class RespectValidator implements ValidatorInterface, OptionsAware
 {
     private $rule;
 

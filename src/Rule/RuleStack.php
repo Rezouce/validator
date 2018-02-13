@@ -5,6 +5,8 @@ namespace Rezouce\Validator\Rule;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\ContainerInterface;
 use Rezouce\Validator\ValidationResult;
+use Rezouce\Validator\Validator\ContextAware;
+use Rezouce\Validator\Validator\OptionsAware;
 use Rezouce\Validator\Validator\ValidatorInterface;
 use Rezouce\Validator\ValidatorExceptionInterface;
 
@@ -15,6 +17,8 @@ class RuleStack
     private $rules;
 
     private $container;
+
+    private $originalData;
 
     public function __construct(string $name, $rules, ContainerInterface $container)
     {
@@ -31,6 +35,8 @@ class RuleStack
      */
     public function validate(array $data): ValidationResult
     {
+        $this->originalData = $data;
+
         $dataParser = new DataParser();
         $dataCollection = $dataParser->parse($data, $this->name);
 
@@ -82,8 +88,12 @@ class RuleStack
             /** @var ValidatorInterface $validator */
             $validator = $this->container->get($rule->getName());
 
-            if (method_exists($validator, 'setOptions')) {
+            if ($validator instanceof OptionsAware) {
                 $validator->setOptions($rule->getOptions());
+            }
+
+            if ($validator instanceof ContextAware) {
+                $validator->setContext($this->originalData);
             }
 
             $validation = $validator->validate($data->getData());
